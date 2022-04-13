@@ -1,0 +1,29 @@
+# compiled output
+/dist
+/tmp
+/out-tsc
+
+.env
+
+# dependencies
+/node_modules
+
+
+# IDEs and editors
+.settings/
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# misc
+npm-debug.log
+/typings
+
+# System Files
+.DS_Store
+*.log

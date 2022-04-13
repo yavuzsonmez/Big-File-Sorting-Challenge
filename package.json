@@ -1,0 +1,15 @@
+{
+  "name": "the_bige_file_sorting_challenge",
+  "version": "1.0.0",
+  "description": "We need to sort a very large text file in lexicographic order. We have limited ressources so that we can't just read the whole file into memory and sort it.. However, we can break the file into separate segments to gradually read it.",
+  "main": "index.js",
+  "scripts": {
+    "test": "./testing/script.sh",
+	"start": "tsc && node ./dist/index.js"
+  },
+  "author": "Yavuz Sönmez",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.6.3"
+  }
+}
