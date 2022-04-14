@@ -27,3 +27,6 @@ npm-debug.log
 # System Files
 .DS_Store
 *.log
+
+# Testing
+/testing/*
