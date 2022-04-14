@@ -46,18 +46,19 @@ export default class SortFile {
 								}
 							});
 						}
-						fs.close(fd, (err) => {
+/* 						fs.close(fd, (err) => {
 							if (err)
 							console.error(err);
 							else {
 								console.log("\n> File Closed");
 							}
-							data.sort();
-							console.log(data);
-							fs.writeFile(outFilename + n, data.join(''), 'ascii', (err) => {
-								if (err)
-									return console.error(err);
-							});
+
+						}); */
+						//data.sort();
+						//console.log(data);
+						fs.writeFile(outFilename + n, data.sort().join(''), 'ascii', (err) => {
+							if (err)
+								return console.error(err);
 						});
 					}
 				});
