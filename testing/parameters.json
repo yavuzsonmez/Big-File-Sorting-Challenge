@@ -1,0 +1,5 @@
+{
+	"maxFileSizeBytes": 20,
+	"numberOfLinesPerSegment": 2,
+	"lineSizeBytes": 5
+}
