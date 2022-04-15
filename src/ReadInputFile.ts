@@ -1,13 +1,12 @@
 
-export const ReadFile = async (fd:any, p:any): Promise <string[]> => {
+export const ReadInputFile = async (fd:any, p:any): Promise <string[]> => {
 
-	const chunks = p.maxFileSizeBytes/p.lineSizeBytes/p.numberOfLinesPerSegment;
 	const buffer: any = Buffer.alloc(p.lineSizeBytes);
 	const arr: string[] = [];
 	let promise: any;
 	let tmp: any;
 
-	for(let n = 0; n < chunks; n++)
+	for(let i = 0; i < p.numberOfLinesPerSegment; i++)
 	{
 		promise = fd.read(buffer, 0, p.lineSizeBytes, null)
 

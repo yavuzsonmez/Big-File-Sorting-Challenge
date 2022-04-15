@@ -1,7 +1,7 @@
 import * as fs from 'fs';
-import { OpenFile } from './OpenFile';
-import { ReadFile } from './ReadFile';
-import { promises as fsPromises } from 'fs';
+import { OpenInputFile } from './OpenInputFile';
+import { ReadInputFile } from './ReadInputFile';
+import { CreateChunk } from './CreateChunk';
 
 export default class SortFile {
 
@@ -35,17 +35,22 @@ export default class SortFile {
 				throw new Error("inFilename doesn't exist." );
 
 			const stats = fs.statSync(inFilename);
-			let arr : string[];
-
 			if (stats.size > this.maxFileSizeBytes)
 				throw new Error("File size doesn't match with maxFileSizeBytes.");
 
-			OpenFile(parameters).then((fd) => {
-				ReadFile(fd, parameters).then((data) => {
+			let arr : string[];
+			const chunks = this.maxFileSizeBytes/this.lineSizeBytes/this.numberOfLinesPerSegment;
+
+			OpenInputFile(parameters).then((fd) => {
+			for (let n = 0; n < chunks; n++)
+			{
+				ReadInputFile(fd, parameters).then((data) => {
 					data.sort();
 					console.log(data);
+					CreateChunk(n, data);
 				})
 				.catch(err => {console.log(err)});
+			}
 			})
 			.catch(err => {console.log(err)});
 			}
