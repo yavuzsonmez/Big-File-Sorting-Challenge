@@ -1,6 +1,6 @@
 import { promises as fsPromises } from 'fs'
 
-export const OpenFile = async (p:any): Promise <any> => {
+export const OpenInputFile = async (p:any): Promise <any> => {
 
 	return new Promise((resolve, reject) => {
 		resolve(fsPromises.open(p.inFilename, 'r'));
