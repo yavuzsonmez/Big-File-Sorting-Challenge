@@ -35,21 +35,15 @@ export default class SortFile {
 				throw new Error("inFilename doesn't exist." );
 
 			const stats = fs.statSync(inFilename);
-			var arr : string[] = [];
+			let arr : string[];
 
 			if (stats.size > this.maxFileSizeBytes)
 				throw new Error("File size doesn't match with maxFileSizeBytes.");
 
 			OpenFile(parameters).then((fd) => {
-				const chunks = this.maxFileSizeBytes/this.lineSizeBytes/this.numberOfLinesPerSegment;
-				for(let n = 0; n < chunks; n++)
-				{
-					ReadFile(fd, parameters).then(data => {
-						arr.push(data.buffer.toString());
-						console.log(arr);
-					}).catch(err => {console.log(err)});
-				}
-				}).catch(err => {console.log(err)});
+				ReadFile(fd, parameters)
+			})
+			.catch(err => {console.log(err)});
 			}
 		catch (err) {
 			console.error(err);
