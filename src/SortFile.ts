@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { OpenFile } from './OpenFile';
 import { ReadFile } from './ReadFile';
-//import { promises as fsPromises } from 'fs';
+import { promises as fsPromises } from 'fs';
 
 export default class SortFile {
 
@@ -41,7 +41,11 @@ export default class SortFile {
 				throw new Error("File size doesn't match with maxFileSizeBytes.");
 
 			OpenFile(parameters).then((fd) => {
-				ReadFile(fd, parameters)
+				ReadFile(fd, parameters).then((data) => {
+					data.sort();
+					console.log(data);
+				})
+				.catch(err => {console.log(err)});
 			})
 			.catch(err => {console.log(err)});
 			}
