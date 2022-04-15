@@ -1,6 +1,7 @@
 import * as fs from 'fs';
-import { CreateChunks } from './CreateChunks';
-import { promises as fsPromises } from 'fs';
+import { OpenFile } from './OpenFile';
+import { ReadFile } from './ReadFile';
+//import { promises as fsPromises } from 'fs';
 
 export default class SortFile {
 
@@ -20,7 +21,7 @@ export default class SortFile {
 			this.lineSizeBytes = lineSizeBytes;
 		};
 
-	public Sort(inFilename : string , outFilename : string ) : void {
+		public async Sort(inFilename : string , outFilename : string ) : Promise <void> {
 		const parameters = {
 			maxFileSizeBytes: this.maxFileSizeBytes,
 			numberOfLinesPerSegment: this.numberOfLinesPerSegment,
@@ -34,26 +35,21 @@ export default class SortFile {
 				throw new Error("inFilename doesn't exist." );
 
 			const stats = fs.statSync(inFilename);
+			var arr : string[] = [];
 
 			if (stats.size > this.maxFileSizeBytes)
 				throw new Error("File size doesn't match with maxFileSizeBytes.");
 
-			CreateChunks(parameters).then((fd:any) => {
-
-			const buffer: any = Buffer.alloc(this.maxFileSizeBytes);
-				console.log(fd);
-			fd.read(buffer, 0, this.lineSizeBytes, null)
-				.then((data:any)=> {
-					console.log(data);
-					console.log(data.buffer.toString());
-				})
-				//console.log(data);
-
-
-
-			}, (err) => { console.log(err);
-			});
-
+			OpenFile(parameters).then((fd) => {
+				const chunks = this.maxFileSizeBytes/this.lineSizeBytes/this.numberOfLinesPerSegment;
+				for(let n = 0; n < chunks; n++)
+				{
+					ReadFile(fd, parameters).then((data) => {
+						arr.push(data.buffer.toString());
+						console.log(arr);
+					}, (err) => console.log(err));
+				}
+				}, (err) => console.log(err));
 			}
 		catch (err) {
 			console.error(err);

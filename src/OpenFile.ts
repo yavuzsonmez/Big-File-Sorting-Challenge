@@ -1,13 +1,10 @@
 import { promises as fsPromises } from 'fs'
 import * as fs from 'fs';
 
-export const CreateChunks = (p:any) => {
-
-	const data : string[] = [];
-	const buffer: any = Buffer.alloc(p.maxFileSizeBytes);
+export const OpenFile = (p:any): Promise <any> => {
 
 	return new Promise((resolve, reject) => {
 		resolve(fsPromises.open(p.inFilename, 'r'));
-		reject("Cannot read the input file.");
+		reject("An error occured while trying to open the input file.");
 	})
 }
