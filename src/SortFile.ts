@@ -44,12 +44,12 @@ export default class SortFile {
 				const chunks = this.maxFileSizeBytes/this.lineSizeBytes/this.numberOfLinesPerSegment;
 				for(let n = 0; n < chunks; n++)
 				{
-					ReadFile(fd, parameters).then((data) => {
+					ReadFile(fd, parameters).then(data => {
 						arr.push(data.buffer.toString());
 						console.log(arr);
-					}, (err) => console.log(err));
+					}).catch(err => {console.log(err)});
 				}
-				}, (err) => console.log(err));
+				}).catch(err => {console.log(err)});
 			}
 		catch (err) {
 			console.error(err);
