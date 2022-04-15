@@ -1,14 +1,21 @@
 import SortFile from "./SortFile";
-import * as p from "../testing/parameters.json"
-import * as f from "../testing/files.json"
 
 const test = () => {
 
-try {
+const param = {
+	maxFileSizeBytes: 20,
+	numberOfLinesPerSegment: 2,
+	lineSizeBytes: 5,
+}
 
-	const test = new SortFile(p.maxFileSizeBytes, p.numberOfLinesPerSegment, p.lineSizeBytes);
-	test.Sort(f.inFilename, f.outFilename);
-	//console.log("-> done.") make a promise with test.Sort .then this console.log
+const file = {
+	inFilename: "./testing/input",
+	outFilename: "./testing/output",
+}
+
+try {
+	const test = new SortFile(param.maxFileSizeBytes, param.numberOfLinesPerSegment, param.lineSizeBytes);
+	test.Sort(file.inFilename, file.outFilename);
 }
 
 catch (err) {
