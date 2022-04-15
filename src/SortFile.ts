@@ -1,4 +1,6 @@
 import * as fs from 'fs';
+import { CreateChunks } from './CreateChunks';
+import { promises as fsPromises } from 'fs';
 
 export default class SortFile {
 
@@ -19,49 +21,39 @@ export default class SortFile {
 		};
 
 	public Sort(inFilename : string , outFilename : string ) : void {
+		const parameters = {
+			maxFileSizeBytes: this.maxFileSizeBytes,
+			numberOfLinesPerSegment: this.numberOfLinesPerSegment,
+			lineSizeBytes: this.lineSizeBytes,
+			inFilename: inFilename,
+			outFilename: outFilename,
+		};
 
 		try {
 			if (!fs.existsSync(inFilename))
-				throw new Error("inFilename is doesn't exist." );
+				throw new Error("inFilename doesn't exist." );
+
 			const stats = fs.statSync(inFilename);
-			const data : string[] = [];
+
 			if (stats.size > this.maxFileSizeBytes)
 				throw new Error("File size doesn't match with maxFileSizeBytes.");
 
-				fs.open(inFilename, 'r', (err, fd) => {
-					if (err)
-						return console.error(err);
-					for(let n = 0; n < (this.maxFileSizeBytes/this.lineSizeBytes/this.numberOfLinesPerSegment); n++)
-					{
-						for(let i = 0; i < this.numberOfLinesPerSegment; i++)
-						{
-							const buffer: any = Buffer.alloc(this.lineSizeBytes);
-							fs.read(fd, buffer, 0, this.lineSizeBytes, null, async (err, bytesRead, buffer) => {
-								if (err)
-									return console.error(err);
-								if (bytesRead > 0) {
-									data.push(buffer.toString());
-									console.log(data);
-								return (data)
-								}
-							});
-						}
-/* 						fs.close(fd, (err) => {
-							if (err)
-							console.error(err);
-							else {
-								console.log("\n> File Closed");
-							}
+			CreateChunks(parameters).then((fd:any) => {
 
-						}); */
-						//data.sort();
-						//console.log(data);
-						fs.writeFile(outFilename + n, data.sort().join(''), 'ascii', (err) => {
-							if (err)
-								return console.error(err);
-						});
-					}
-				});
+			const buffer: any = Buffer.alloc(this.maxFileSizeBytes);
+				console.log(fd);
+			fd.read(buffer, 0, this.lineSizeBytes, null)
+				.then((data:any)=> {
+					console.log(data);
+					console.log(data.buffer.toString());
+				})
+				//console.log(data);
+
+
+
+			}, (err) => { console.log(err);
+			});
+
 			}
 		catch (err) {
 			console.error(err);
