@@ -31,6 +31,7 @@ export default class SortFile {
 			outFilename: outFilename,
 			tmpFilename: "_chunk_",
 			n: -1,
+			step: 0,
 		};
 
 		try {
@@ -46,9 +47,10 @@ export default class SortFile {
 			{
 				data = await ReadInputFile(fd, parameters);
 				data.sort();
-				console.log(data);
+				//console.log(data);
 				await CreateChunk(parameters.n, data, parameters);
 			}
+			parameters.step++;
 			await fd.close();
 			data = await CompareChunks(parameters);
 			console.log(data);
