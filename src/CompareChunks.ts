@@ -8,7 +8,7 @@ import { promises as fsPromises } from 'fs'
 export const CompareChunks = (p:any): Promise <string[]> => {
 
 	const data:string[] = [];
-
+	
 	return new Promise((resolve, reject) => {
 		resolve(data);
 		reject("An error occured while trying to compare chunks.");

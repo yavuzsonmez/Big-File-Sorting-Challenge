@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import { OpenInputFile } from './OpenInputFile';
 import { ReadInputFile } from './ReadInputFile';
 import { CreateChunk } from './CreateChunk';
+import { CompareChunks } from './CompareChunks';
 
 export default class SortFile {
 
@@ -29,6 +30,7 @@ export default class SortFile {
 			inFilename: inFilename,
 			outFilename: outFilename,
 			tmpFilename: "_chunk_",
+			n: -1,
 		};
 
 		try {
@@ -40,15 +42,16 @@ export default class SortFile {
 			const chunks:number = this.maxFileSizeBytes / this.lineSizeBytes / this.numberOfLinesPerSegment;
 			const fd = await OpenInputFile(parameters);
 			let data:string[];
-			for (let n = 0; n < chunks; n++)
+			for (parameters.n = 0; parameters.n < chunks; parameters.n++)
 			{
 				data = await ReadInputFile(fd, parameters);
 				data.sort();
 				console.log(data);
-				await CreateChunk(n, data, parameters);
+				await CreateChunk(parameters.n, data, parameters);
 			}
 			await fd.close();
-			//data = await CompareChunks(parameters);
+			data = await CompareChunks(parameters);
+			console.log(data);
 		}
 		catch (err) {
 			console.error(err);
