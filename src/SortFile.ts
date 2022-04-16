@@ -45,9 +45,9 @@ export default class SortFile {
 				const data = await ReadInputFile(fd, parameters);
 					data.sort();
 					console.log(data);
-					CreateChunk(n, data);
+					let promise = await CreateChunk(n, data);
 					if (n == chunks-1)
-						fd.close();
+						promise = await fd.close();
 			}
 		}
 		catch (err) {
