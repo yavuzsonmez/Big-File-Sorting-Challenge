@@ -3,7 +3,7 @@ import SortFile from "./SortFile";
 const test = () => {
 
 const param = {
-	maxFileSizeBytes: 20,
+	maxFileSizeBytes: 25,
 	numberOfLinesPerSegment: 2,
 	lineSizeBytes: 5,
 }
