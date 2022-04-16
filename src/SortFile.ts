@@ -47,7 +47,7 @@ export default class SortFile {
 			{
 				data = await ReadInputFile(fd, parameters);
 				data.sort();
-				//console.log(data);
+				console.log(data, '0');
 				await CreateChunk(parameters.n, data, parameters);
 			}
 			parameters.step++;
