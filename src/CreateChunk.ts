@@ -1,6 +1,6 @@
 import { promises as fsPromises } from 'fs'
 
-export const CreateChunk = async (n:number, data:string[], p:any): Promise <void> => {
+export const CreateChunk = (n:number, data:string[], p:any): Promise <void> => {
 
 	const outFile:string = "./testing/0" + p.tmpFilename + n.toString();
 

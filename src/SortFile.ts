@@ -39,15 +39,16 @@ export default class SortFile {
 
 			const chunks:number = this.maxFileSizeBytes / this.lineSizeBytes / this.numberOfLinesPerSegment;
 			const fd = await OpenInputFile(parameters);
+			let data:string[];
 			for (let n = 0; n < chunks; n++)
 			{
-				const data = await ReadInputFile(fd, parameters);
+				data = await ReadInputFile(fd, parameters);
 				data.sort();
 				console.log(data);
-				let promise:any = await CreateChunk(n, data, parameters);
-				if (n == chunks - 1)
-					promise = await fd.close();
+				await CreateChunk(n, data, parameters);
 			}
+			await fd.close();
+			//data = await CompareChunks(parameters);
 		}
 		catch (err) {
 			console.error(err);
