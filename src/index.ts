@@ -1,6 +1,6 @@
 import SortFile from "./SortFile";
 
-const test = () => {
+const Big_File_Sorting = () => {
 
 const param = {
 	maxFileSizeBytes: 25,
@@ -24,4 +24,4 @@ catch (err) {
 
 };
 
-test();
+Big_File_Sorting();
