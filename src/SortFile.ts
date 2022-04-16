@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import { OpenInputFile } from './OpenInputFile';
 import { ReadInputFile } from './ReadInputFile';
 import { CreateChunk } from './CreateChunk';
+import { CompareChunks } from './CompareChunks';
 
 export default class SortFile {
 
@@ -28,32 +29,32 @@ export default class SortFile {
 			lineSizeBytes: this.lineSizeBytes,
 			inFilename: inFilename,
 			outFilename: outFilename,
+			tmpFilename: "_chunk_",
+			n: -1,
+			step: 0,
 		};
 
 		try {
 			if (!fs.existsSync(inFilename))
-				throw new Error("inFilename doesn't exist." );
-
-			const stats = fs.statSync(inFilename);
-			if (stats.size > this.maxFileSizeBytes)
+				throw new Error("inFilename doesn't exist.");
+			if (fs.statSync(inFilename).size > this.maxFileSizeBytes)
 				throw new Error("File size doesn't match with maxFileSizeBytes.");
 
-			let arr : string[];
-			const chunks = this.maxFileSizeBytes/this.lineSizeBytes/this.numberOfLinesPerSegment;
-
-			OpenInputFile(parameters).then((fd) => {
-			for (let n = 0; n < chunks; n++)
+			const chunks:number = this.maxFileSizeBytes / this.lineSizeBytes / this.numberOfLinesPerSegment;
+			const fd = await OpenInputFile(parameters);
+			let data:string[];
+			for (parameters.n = 0; parameters.n < chunks; parameters.n++)
 			{
-				ReadInputFile(fd, parameters).then((data) => {
-					data.sort();
-					console.log(data);
-					CreateChunk(n, data);
-				})
-				.catch(err => {console.log(err)});
+				data = await ReadInputFile(fd, parameters);
+				data.sort();
+				//console.log(data);
+				await CreateChunk(parameters.n, data, parameters);
 			}
-			})
-			.catch(err => {console.log(err)});
-			}
+			parameters.step++;
+			await fd.close();
+			data = await CompareChunks(parameters);
+			console.log(data);
+		}
 		catch (err) {
 			console.error(err);
 		}
