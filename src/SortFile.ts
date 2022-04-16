@@ -39,21 +39,17 @@ export default class SortFile {
 				throw new Error("File size doesn't match with maxFileSizeBytes.");
 
 			const chunks = this.maxFileSizeBytes/this.lineSizeBytes/this.numberOfLinesPerSegment;
-			OpenInputFile(parameters).then((fd) => {
+			const fd = await OpenInputFile(parameters);
 			for (let n = 0; n < chunks; n++)
 			{
-				ReadInputFile(fd, parameters).then((data) => {
+				const data = await ReadInputFile(fd, parameters);
 					data.sort();
 					console.log(data);
 					CreateChunk(n, data);
 					if (n == chunks-1)
 						fd.close();
-				})
-				.catch(err => {console.log(err)});
 			}
-			})
-			.catch(err => {console.log(err)});
-			}
+		}
 		catch (err) {
 			console.error(err);
 		}
