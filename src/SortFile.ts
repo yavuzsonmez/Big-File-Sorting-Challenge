@@ -28,26 +28,25 @@ export default class SortFile {
 			lineSizeBytes: this.lineSizeBytes,
 			inFilename: inFilename,
 			outFilename: outFilename,
+			tmpFilename: "_chunk_",
 		};
 
 		try {
 			if (!fs.existsSync(inFilename))
-				throw new Error("inFilename doesn't exist." );
-
-			const stats = fs.statSync(inFilename);
-			if (stats.size > this.maxFileSizeBytes)
+				throw new Error("inFilename doesn't exist.");
+			if (fs.statSync(inFilename).size > this.maxFileSizeBytes)
 				throw new Error("File size doesn't match with maxFileSizeBytes.");
 
-			const chunks = this.maxFileSizeBytes/this.lineSizeBytes/this.numberOfLinesPerSegment;
+			const chunks:number = this.maxFileSizeBytes / this.lineSizeBytes / this.numberOfLinesPerSegment;
 			const fd = await OpenInputFile(parameters);
 			for (let n = 0; n < chunks; n++)
 			{
 				const data = await ReadInputFile(fd, parameters);
-					data.sort();
-					console.log(data);
-					let promise = await CreateChunk(n, data);
-					if (n == chunks-1)
-						promise = await fd.close();
+				data.sort();
+				console.log(data);
+				let promise:any = await CreateChunk(n, data, parameters);
+				if (n == chunks - 1)
+					promise = await fd.close();
 			}
 		}
 		catch (err) {
