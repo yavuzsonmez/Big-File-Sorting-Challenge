@@ -45,7 +45,7 @@ export default class SortFile {
 			step: 0,
 			inFileEndNewline: 1,
 		};
-		//console.log("inital chunks", parameters.chunks);
+		console.log("inital chunks:", parameters.chunks);
 		try {
 			if (!fs.existsSync(inFilename))
 				throw new Error("inFilename doesn't exist.");
@@ -73,10 +73,9 @@ export default class SortFile {
 					continue ;
 				}
 			}
-
-			//console.log('hi', parameters.inFileEndNewline);
-			//if (parameters.inFileEndNewline == 0)
-			//	await fsPromises.truncate(parameters.outFilename, (parameters.maxFileSizeBytes - 1));
+			console.log('hi', parameters.inFileEndNewline);
+			if (parameters.inFileEndNewline == 0)
+				await fsPromises.truncate(parameters.outFilename, (parameters.maxFileSizeBytes - 1));
 		}
 		catch (err) {
 			console.error(err);

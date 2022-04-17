@@ -47,7 +47,9 @@ export const CompareChunks = async (p:any): Promise <void> => {
 			}
 			data.sort();
 			console.log(data);
-			data[0] === promiseRead[0].buffer.toString() ? k = 0 : k = 1;
+			console.log("k = " + k);
+			data[0] === promiseRead[k].buffer.toString() ? k = k : (k === 0 ? k = 1 : k = 0);
+
 			await fsPromises.appendFile(outputChunk, data[0], 'ascii');
 			console.log(read, k, data.shift());
 		}

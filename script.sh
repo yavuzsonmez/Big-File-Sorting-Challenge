@@ -1,8 +1,16 @@
 #!/bin/bash
 
-rm testing/*chunk*
-rm testing/output
+rm testing/*chunk* ;
+rm testing/output ;
 
-echo 'temporary files and testing files removed from testing directory'
+echo ;
+echo '-> Temporary files and testing files removed from testing directory' ;
 
-npm start
+npm start > testing/log.txt ;
+
+echo 'Logs are here -> /testing/log.txt' ;
+echo ;
+echo ;
+
+cat testing/output ;
+
