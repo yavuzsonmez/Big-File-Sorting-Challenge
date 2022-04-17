@@ -34,7 +34,7 @@ export default class SortFile {
 			chunks: Math.ceil(this.maxFileSizeBytes / this.lineSizeBytes / this.numberOfLinesPerSegment),
 			step: 0,
 		};
-		console.log(parameters.chunks);
+		console.log("inital chunks", parameters.chunks);
 		try {
 			if (!fs.existsSync(inFilename))
 				throw new Error("inFilename doesn't exist.");
@@ -47,13 +47,12 @@ export default class SortFile {
 			{
 				data = await ReadInputFile(fd, parameters);
 				data.sort();
-				console.log(data, 'batch 0');
+				//console.log(data, 'batch 0');
 				await CreateChunk(n, data, parameters);
 			}
 			parameters.step++;
 			await fd.close();
-			data = await CompareChunks(parameters);
-			console.log(data, 'batch 1');
+			await CompareChunks(parameters);
 		}
 		catch (err) {
 			console.error(err);

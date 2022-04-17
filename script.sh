@@ -1,4 +1,8 @@
 #!/bin/bash
 
 rm testing/*chunk*
-echo 'temporary files removed from testing directory'
+rm testing/output
+
+echo 'temporary files and testing files removed from testing directory'
+
+npm start
