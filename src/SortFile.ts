@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-//import { promises as fsPromises } from 'fs'
+import { promises as fsPromises } from 'fs'
 import { OpenInputFile } from './OpenInputFile';
 import { ReadInputFile } from './ReadInputFile';
 import { CreateChunk } from './CreateChunk';
@@ -54,7 +54,17 @@ export default class SortFile {
 			}
 			parameters.step++;
 			await fd.close();
-			await CompareChunks(parameters);
+			while(true)
+			{
+				await CompareChunks(parameters);
+				try {
+					await fsPromises.access(outFilename, fs.constants.F_OK);
+				}
+				catch {
+					console.error('An error occured during the process.');
+				}
+			}
+
 			//console.log('hi', parameters.inFileEndNewline);
 			//if (parameters.inFileEndNewline == 0)
 			//	await fsPromises.truncate(parameters.outFilename, (parameters.maxFileSizeBytes - 1));

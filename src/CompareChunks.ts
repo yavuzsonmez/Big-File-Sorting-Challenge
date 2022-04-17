@@ -17,12 +17,12 @@ export const CompareChunks = async (p:any): Promise <void> => {
 		let outputChunk:string;
 		p.chunks / 2 === 1 ? outputChunk = p.outFilename : outputChunk = outputTemplate + i;
 		i++;
-		if ((p.chunks % 2 === 1) && (n === p.chunks - 1))
+/* 		if ((p.chunks % 2 === 1) && (n === p.chunks - 1))
 		{
 			console.log("HELLO");
 			await fsPromises.rename(inputTemplate + n.toString(), outputChunk);
 			break ;
-		}
+		} */
 		const data:string[] = [];
 		const intputChunks:string[] = [inputTemplate + n.toString(), inputTemplate + (n + 1).toString()]
 		const fd:any[] = await Promise.all([fsPromises.open(intputChunks[0], 'r'), fsPromises.open(intputChunks[1], 'r')]);
