@@ -30,7 +30,17 @@ export const CompareChunks = async (p:any): Promise <void> => {
 		while (read === true)
 		{
 			promiseRead[k] = await fd[n + k].read(tmp, 0, p.lineSizeBytes, null);
-			(promiseRead[k] !== undefined && promiseRead[k].bytesRead > 0) ? data.push(promiseRead[k].buffer.toString()) : read = false;
+			if (promiseRead[k] !== undefined && promiseRead[k].bytesRead > 0)
+				data.push(promiseRead[k].buffer.toString());
+			else
+			{
+				k === 0 ? k = 1 : k = 0;
+				promiseRead[k] = await fd[n + k].read(tmp, 0, p.lineSizeBytes, null);
+				if (promiseRead[k] !== undefined && promiseRead[k].bytesRead > 0)
+					data.push(promiseRead[k].buffer.toString());
+				else
+					read = false;
+			}
 			data.sort();
 			console.log(data);
 			data[0] === promiseRead[0].buffer.toString() ? k = 0 : k = 1;

@@ -4,7 +4,7 @@ const Big_File_Sorting = () => {
 
 const param = {
 	maxFileSizeBytes: 20,
-	numberOfLinesPerSegment: 3,
+	numberOfLinesPerSegment: 2,
 	lineSizeBytes: 5,
 }
 
