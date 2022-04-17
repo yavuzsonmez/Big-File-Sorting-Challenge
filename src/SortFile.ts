@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+//import { promises as fsPromises } from 'fs'
 import { OpenInputFile } from './OpenInputFile';
 import { ReadInputFile } from './ReadInputFile';
 import { CreateChunk } from './CreateChunk';
@@ -33,8 +34,9 @@ export default class SortFile {
 			tmpFilename: "_chunk_",
 			chunks: Math.ceil(this.maxFileSizeBytes / this.lineSizeBytes / this.numberOfLinesPerSegment),
 			step: 0,
+			inFileEndNewline: 1,
 		};
-		console.log("inital chunks", parameters.chunks);
+		//console.log("inital chunks", parameters.chunks);
 		try {
 			if (!fs.existsSync(inFilename))
 				throw new Error("inFilename doesn't exist.");
@@ -53,6 +55,9 @@ export default class SortFile {
 			parameters.step++;
 			await fd.close();
 			await CompareChunks(parameters);
+			//console.log('hi', parameters.inFileEndNewline);
+			//if (parameters.inFileEndNewline == 0)
+			//	await fsPromises.truncate(parameters.outFilename, (parameters.maxFileSizeBytes - 1));
 		}
 		catch (err) {
 			console.error(err);
