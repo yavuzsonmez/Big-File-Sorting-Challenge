@@ -10,32 +10,36 @@ export const CompareChunks = async (p:any): Promise <void> => {
 	const inputTemplate = './testing/' + (p.step - 1).toString() + p.tmpFilename;
 	const outputTemplate = './testing/' + (p.step).toString() + p.tmpFilename;
 	const tmp: any = Buffer.alloc(p.lineSizeBytes);
+	let i:number = 0;
+	console.log(p.chunks);
 	for (let n = 0; n < p.chunks; n += 2)
 	{
 		let outputChunk:string;
-		p.chunks / 2 === 1 ? outputChunk = p.outFilename : outputChunk = outputTemplate + n;
+		p.chunks / 2 === 1 ? outputChunk = p.outFilename : outputChunk = outputTemplate + i;
+		i++;
 		if ((p.chunks % 2 === 1) && (n === p.chunks - 1))
 		{
+			console.log("HELLO");
 			await fsPromises.rename(inputTemplate + n.toString(), outputChunk);
 			break ;
 		}
 		const data:string[] = [];
 		const intputChunks:string[] = [inputTemplate + n.toString(), inputTemplate + (n + 1).toString()]
-		const fd:any[] = await Promise.all([fsPromises.open(intputChunks[n], 'r'), fsPromises.open(intputChunks[n + 1], 'r')]);
+		const fd:any[] = await Promise.all([fsPromises.open(intputChunks[0], 'r'), fsPromises.open(intputChunks[1], 'r')]);
 		let read:boolean = true;
 		let k:number = 1;
 
-		const promiseRead:any[] = [await fd[n].read(tmp, 0, p.lineSizeBytes, null)];
+		const promiseRead:any[] = [await fd[0].read(tmp, 0, p.lineSizeBytes, null)];
 		promiseRead[0].bytesRead > 0 ? data.push(promiseRead[0].buffer.toString()) : read = false;
 		while (read === true)
 		{
-			promiseRead[k] = await fd[n + k].read(tmp, 0, p.lineSizeBytes, null);
+			promiseRead[k] = await fd[k].read(tmp, 0, p.lineSizeBytes, null);
 			if (promiseRead[k] !== undefined && promiseRead[k].bytesRead > 0)
 				data.push(promiseRead[k].buffer.toString());
 			else
 			{
 				k === 0 ? k = 1 : k = 0;
-				promiseRead[k] = await fd[n + k].read(tmp, 0, p.lineSizeBytes, null);
+				promiseRead[k] = await fd[k].read(tmp, 0, p.lineSizeBytes, null);
 				if (promiseRead[k] !== undefined && promiseRead[k].bytesRead > 0)
 					data.push(promiseRead[k].buffer.toString());
 				else
@@ -43,11 +47,13 @@ export const CompareChunks = async (p:any): Promise <void> => {
 			}
 			data.sort();
 			console.log(data);
-			data[0] === promiseRead[0].buffer.toString() ? k = 0 : k = 1;
+			console.log("k = " + k);
+			data[0] === promiseRead[k].buffer.toString() ? k = k : (k === 0 ? k = 1 : k = 0);
+
 			await fsPromises.appendFile(outputChunk, data[0], 'ascii');
 			console.log(read, k, data.shift());
 		}
-		await Promise.all([fd[n].close(), fd[n + 1].close()]);
+		await Promise.all([fd[0].close(), fd[1].close()]);
 		//await Promise.all([fsPromises.rm(intputChunks[0]), fsPromises.rm(intputChunks[1])]);
 	}
 	p.step++;

@@ -1,8 +1,18 @@
 import * as fs from 'fs';
+import { promises as fsPromises } from 'fs'
 import { OpenInputFile } from './OpenInputFile';
 import { ReadInputFile } from './ReadInputFile';
 import { CreateChunk } from './CreateChunk';
 import { CompareChunks } from './CompareChunks';
+
+/*
+*	Main function
+*		- Error handling
+*		- Open input file
+*		- Read Loop through the input
+*			and create the first batch of chunks
+*		- External merge Sort
+*/
 
 export default class SortFile {
 
@@ -33,8 +43,9 @@ export default class SortFile {
 			tmpFilename: "_chunk_",
 			chunks: Math.ceil(this.maxFileSizeBytes / this.lineSizeBytes / this.numberOfLinesPerSegment),
 			step: 0,
+			inFileEndNewline: 1,
 		};
-		console.log("inital chunks", parameters.chunks);
+		console.log("inital chunks:", parameters.chunks);
 		try {
 			if (!fs.existsSync(inFilename))
 				throw new Error("inFilename doesn't exist.");
@@ -47,12 +58,24 @@ export default class SortFile {
 			{
 				data = await ReadInputFile(fd, parameters);
 				data.sort();
-				//console.log(data, 'batch 0');
 				await CreateChunk(n, data, parameters);
 			}
 			parameters.step++;
 			await fd.close();
-			await CompareChunks(parameters);
+			while(true)
+			{
+				await CompareChunks(parameters);
+				try {
+					await fsPromises.access(outFilename, fs.constants.F_OK);
+					break ;
+				}
+				catch {
+					continue ;
+				}
+			}
+			console.log('hi', parameters.inFileEndNewline);
+			if (parameters.inFileEndNewline == 0)
+				await fsPromises.truncate(parameters.outFilename, (parameters.maxFileSizeBytes - 1));
 		}
 		catch (err) {
 			console.error(err);
