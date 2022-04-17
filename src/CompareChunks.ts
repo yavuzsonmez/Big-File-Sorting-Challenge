@@ -31,12 +31,10 @@ export	const CompareChunks = async (p:any, n:number, inputTemplate:string, outpu
 				read = false;
 		}
 		data.sort();
-		console.log(data);
-		console.log("k = " + k);
 		data[0] === promiseRead[k].buffer.toString() ? k = k : (k === 0 ? k = 1 : k = 0);
-
 		await fsPromises.appendFile(outputChunk, data[0], 'ascii');
-		console.log(read, k, data.shift());
+		console.log(data);
+		console.log(data.shift() + " was pushed to the next chunk.");
 	}
 	await Promise.all([fd[0].close(), fd[1].close()]);
 	await Promise.all([fsPromises.rm(intputChunks[0]), fsPromises.rm(intputChunks[1])]);

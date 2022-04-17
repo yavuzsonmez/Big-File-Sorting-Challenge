@@ -29,4 +29,6 @@ npm-debug.log
 *.log
 
 # Testing
-/testing/*
+/testing/*chunk*
+/testing/log.txt
+/testing/output
