@@ -47,9 +47,9 @@ export default	class SortFile {
 		};
 		console.log("inital chunks:", parameters.chunks);
 		try {
-			if (!fs.existsSync(inFilename))
-				throw new Error("inFilename doesn't exist.");
-			if (fs.statSync(inFilename).size > this.maxFileSizeBytes)
+			await fsPromises.access(inFilename, fs.constants.F_OK | fs.constants.R_OK);
+			const stats = await fsPromises.stat(inFilename);
+			if (stats.size > this.maxFileSizeBytes)
 				throw new Error("File size doesn't match with maxFileSizeBytes.");
 
 			const	fd = await OpenInputFile(parameters);
