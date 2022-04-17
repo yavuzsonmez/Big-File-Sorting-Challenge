@@ -3,7 +3,7 @@ import { promises as fsPromises } from 'fs'
 import { OpenInputFile } from './OpenInputFile';
 import { ReadInputFile } from './ReadInputFile';
 import { CreateChunk } from './CreateChunk';
-import { CompareChunks } from './CompareChunks';
+import { ExternalSort } from './ExternalSort';
 
 /*
 *	Main function
@@ -14,7 +14,7 @@ import { CompareChunks } from './CompareChunks';
 *		- External merge Sort
 */
 
-export default class SortFile {
+export default	class SortFile {
 
 	constructor (
 		private maxFileSizeBytes : number,
@@ -52,8 +52,8 @@ export default class SortFile {
 			if (fs.statSync(inFilename).size > this.maxFileSizeBytes)
 				throw new Error("File size doesn't match with maxFileSizeBytes.");
 
-			const fd = await OpenInputFile(parameters);
-			let data:string[];
+			const	fd = await OpenInputFile(parameters);
+			let		data:string[];
 			for (let n = 0; n < parameters.chunks; n++)
 			{
 				data = await ReadInputFile(fd, parameters);
@@ -64,7 +64,7 @@ export default class SortFile {
 			await fd.close();
 			while(true)
 			{
-				await CompareChunks(parameters);
+				await ExternalSort(parameters);
 				try {
 					await fsPromises.access(outFilename, fs.constants.F_OK);
 					break ;
@@ -73,7 +73,6 @@ export default class SortFile {
 					continue ;
 				}
 			}
-			console.log('hi', parameters.inFileEndNewline);
 			if (parameters.inFileEndNewline == 0)
 				await fsPromises.truncate(parameters.outFilename, (parameters.maxFileSizeBytes - 1));
 		}
