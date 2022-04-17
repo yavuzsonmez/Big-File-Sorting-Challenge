@@ -49,19 +49,20 @@ export default class SortFile {
 			{
 				data = await ReadInputFile(fd, parameters);
 				data.sort();
-				//console.log(data, 'batch 0');
 				await CreateChunk(n, data, parameters);
 			}
 			parameters.step++;
 			await fd.close();
+			let success:undefined;
 			while(true)
 			{
 				await CompareChunks(parameters);
 				try {
 					await fsPromises.access(outFilename, fs.constants.F_OK);
+					break ;
 				}
 				catch {
-					console.error('An error occured during the process.');
+					continue ;
 				}
 			}
 
