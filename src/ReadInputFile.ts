@@ -1,4 +1,9 @@
 
+/*
+*	Read numberOfLinesPerSegment * lineSizeBytes
+*	in the input file and return an array of sorted strings
+*/
+
 export const ReadInputFile = async (fd:any, p:any): Promise <string[]> => {
 
 	const buffer: any = Buffer.alloc(p.lineSizeBytes);

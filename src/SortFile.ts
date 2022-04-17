@@ -5,6 +5,15 @@ import { ReadInputFile } from './ReadInputFile';
 import { CreateChunk } from './CreateChunk';
 import { CompareChunks } from './CompareChunks';
 
+/*
+*	Main function
+*		- Error handling
+*		- Open input file
+*		- Read Loop through the input
+*			and create the first batch of chunks
+*		- External merge Sort
+*/
+
 export default class SortFile {
 
 	constructor (
@@ -53,7 +62,6 @@ export default class SortFile {
 			}
 			parameters.step++;
 			await fd.close();
-			let success:undefined;
 			while(true)
 			{
 				await CompareChunks(parameters);
