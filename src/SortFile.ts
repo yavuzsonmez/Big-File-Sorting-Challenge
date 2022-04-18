@@ -40,12 +40,12 @@ export default	class SortFile {
 			lineSizeBytes: this.lineSizeBytes,
 			inFilename: inFilename,
 			outFilename: outFilename,
-			tmpFilename: "_chunk_",
+			tmpFilename: "_tmp_" + inFilename.split('/').pop() + "_",
 			chunks: Math.ceil(this.maxFileSizeBytes / this.lineSizeBytes / this.numberOfLinesPerSegment),
 			step: 0,
 			inFileEndNewline: 1,
 		};
-		console.log("inital chunks:", parameters.chunks);
+		console.log(`Initial chunks ${parameters.chunks}\n`);
 		try {
 			await fsPromises.access(inFilename, fs.constants.F_OK | fs.constants.R_OK);
 			const stats = await fsPromises.stat(inFilename);
@@ -61,7 +61,7 @@ export default	class SortFile {
 				await CreateChunk(n, data, parameters);
 			}
 			parameters.step++;
-			await fd.close();
+			fd.close();
 			while(true)
 			{
 				await ExternalSort(parameters);

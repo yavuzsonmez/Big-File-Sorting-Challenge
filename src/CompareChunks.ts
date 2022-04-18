@@ -1,8 +1,15 @@
 import { promises as fsPromises } from 'fs'
 
-/*	Push the first lineSizeBytes of numberOfLinesPerSegment chunks in an array.
-*	Remove them from their initial file
-*	Sort the array and return it as promise
+
+/*
+*	Merge chunks by iteratings over them
+*		- Push the first lineSizeBytes of numberOfLinesPerSegment
+*			chunks in an array.
+*		- Sort the array and push the first element to the new chunk and shift it from the array
+*		- if the pushed element is the one from the last read
+*			then read the next string in the same file, otherwise read in the opposite file
+*			(line 44)
+*				data[0] === promiseRead[k].buffer.toString() ? k = k : (k === 0 ? k = 1 : k = 0);
 */
 
 export	const CompareChunks = async (p:any, n:number, inputTemplate:string, outputChunk:string): Promise <void> => {
@@ -33,11 +40,13 @@ export	const CompareChunks = async (p:any, n:number, inputTemplate:string, outpu
 		data.sort();
 		data[0] === promiseRead[k].buffer.toString() ? k = k : (k === 0 ? k = 1 : k = 0);
 		await fsPromises.appendFile(outputChunk, data[0], 'ascii');
+		console.log("Compared data:");
 		console.log(data);
-		console.log(data.shift() + " was pushed to the next chunk.");
+		const pushed:any = data.shift();
+		console.log(`Pushed to the next chunk: ${pushed}________________________________________`);
 	}
-	await Promise.all([fd[0].close(), fd[1].close()]);
-	await Promise.all([fsPromises.rm(intputChunks[0]), fsPromises.rm(intputChunks[1])]);
+	Promise.all([fd[0].close(), fd[1].close()]);
+	Promise.all([fsPromises.rm(intputChunks[0]), fsPromises.rm(intputChunks[1])]);
 	return new Promise((resolve, reject) => {
 		resolve();
 		reject("An error occured while trying to compare chunks.");
