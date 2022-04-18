@@ -18,8 +18,6 @@ export	const ReadInputFile = async (fd:any, p:any): Promise <string[]> => {
 		if (promise.buffer[p.lineSizeBytes - 1] === 0)
 		{
 			promise.buffer[p.lineSizeBytes - 1] = 10;
-			//promise.buffer[p.lineSizeBytes - 1] = 13; \r
-			//promise.buffer[p.lineSizeBytes] = 10; \n
 			p.inFileEndNewline = 0;
 		}
 		arr.push(promise.buffer.toString());

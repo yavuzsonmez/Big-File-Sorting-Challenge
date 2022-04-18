@@ -1,15 +1,15 @@
 import { promises as fsPromises } from 'fs'
 import { CompareChunks } from './CompareChunks';
 
-/*	Push the first lineSizeBytes of numberOfLinesPerSegment chunks in an array.
-*	Remove them from their initial file
-*	Sort the array and return it as promise
+/*
+*	Merge sort externally a batch of chunks
+*	until they're all merged and rdy for the next step
 */
 
 export	const ExternalSort = async (p:any): Promise <void> => {
 
-	const	inputTemplate = './testing/' + (p.step - 1).toString() + p.tmpFilename;
-	const	outputTemplate = './testing/' + (p.step).toString() + p.tmpFilename;
+	const	inputTemplate = './tmp/' + (p.step - 1).toString() + p.tmpFilename;
+	const	outputTemplate = './tmp/' + (p.step).toString() + p.tmpFilename;
 	let		outputChunk:string;
 	let		i:number = 0;
 

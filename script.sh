@@ -23,31 +23,41 @@ echo '                                /____/'
 
 # To Remove tmp files when testing the script
 
-rm testing/*chunk* ;
-rm testing/output ;
-echo 'Temporary files and testing files removed from testing directory' ;
+rm tmp/* ;
 
-npm start > testing/log.txt ;
+# Run and log
 
-echo -ne '#####                     (33%)\r'
-sleep 2
-echo -ne '#############             (66%)\r'
-sleep 2
-echo -ne '#######################   (100%)\r'
+npm start > log.txt ;
+
+# Loading
+
+echo -ne '####                   (20%)\r'
+sleep 1
+echo -ne '########               (40%)\r'
+sleep 1
+echo -ne '############           (60%)\r'
+sleep 1
+echo -ne '################       (80%)\r'
+sleep 1
+echo -ne '####################   (100%)\r'
 echo ''
 
-if grep 'Error' testing/log.txt ; then
+# Log success or error
+
+if grep 'Error' tmp/log.txt ; then
 {
-	echo 'Wrong parameters, File inacessibe or Error during the merging process, more details there: /testing/log.txt'
+	echo 'Wrong parameters, File inacessibe or Error during the merging process, more details there: /tmp/log.txt'
 	exit 1 ;
 }
 else
 {
-	sed -i 1,4d testing/log.txt ;
-	echo 'Success, more details there: /testing/log.txt' ;
+	sed -i 1,4d log.txt ;
+	echo 'Success, more details there: /tmp/log.txt' ;
 	echo ''
 	#more testing/output ;
 }
 fi
 
+# Remove unremoved tempo files
 
+rm tmp/* ;
