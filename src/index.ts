@@ -3,14 +3,14 @@ import SortFile from "./SortFile";
 const Big_File_Sorting = () => {
 
 const param = {
-	maxFileSizeBytes: 125,
+	maxFileSizeBytes: 995,
 	numberOfLinesPerSegment: 2,
 	lineSizeBytes: 5,
 }
 
 const file = {
-	inFilename: "./testing/input",
-	outFilename: "./testing/output",
+	inFilename: "./testing/input2",
+	outFilename: "./testing/output2",
 }
 
 try {

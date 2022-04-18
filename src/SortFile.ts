@@ -40,7 +40,7 @@ export default	class SortFile {
 			lineSizeBytes: this.lineSizeBytes,
 			inFilename: inFilename,
 			outFilename: outFilename,
-			tmpFilename: "_chunk_",
+			tmpFilename: "_tmp_" + inFilename.split('/').pop() + "_",
 			chunks: Math.ceil(this.maxFileSizeBytes / this.lineSizeBytes / this.numberOfLinesPerSegment),
 			step: 0,
 			inFileEndNewline: 1,
