@@ -45,15 +45,15 @@ echo ''
 
 # Log success or error
 
-if grep 'Error' tmp/log.txt ; then
+if grep 'Error' log.txt ; then
 {
-	echo 'Wrong parameters, File inacessibe or Error during the merging process, more details there: /tmp/log.txt'
+	echo 'Wrong parameters, File inacessibe or Error during the merging process, more details there: log.txt'
 	exit 1 ;
 }
 else
 {
 	sed -i 1,4d log.txt ;
-	echo 'Success, more details there: /tmp/log.txt' ;
+	echo 'Success, more details there: log.txt' ;
 	echo ''
 	#more testing/output ;
 }
