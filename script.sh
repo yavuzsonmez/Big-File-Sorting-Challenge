@@ -23,7 +23,8 @@ echo '                                /____/'
 
 # To Remove tmp files when testing the script
 
-rm tmp/* ;
+rm -rf tmp/ ;
+mkdir tmp ;
 
 # Run and log
 
@@ -60,4 +61,4 @@ fi
 
 # Remove unremoved tempo files
 
-rm tmp/* ;
+rm -rf tmp/
